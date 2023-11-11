@@ -25,7 +25,7 @@ public:
 			return "Even";
 		}
 		else {
-			return 0;
+			return "0";
 		}
 	}
 	std::string color(const int number) {

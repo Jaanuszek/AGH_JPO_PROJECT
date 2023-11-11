@@ -18,25 +18,28 @@ using std::string;
 //using namespace std;
 int main()
 {
-	int num{};
-	string pattern, color;
+	int num{},bet{};
+	string color;
+	std::vector<string> pattern;
 	std::random_device rd;
 	std::uniform_int_distribution<int>  dist(0, 36);
 	Game start;
 	while (1) {
 		start.choice();
-		cout << "Pattern: " << pattern <<endl;
+		//bet=start.choiceBet();
 		num = dist(rd);
 		RouletteWheel p(num);
 		cout << "Parity: " << p.isOdd(num) << endl;;
 		color = p.color(num);
 		cout << color << endl;
-		pattern += p.color(num) + " " +std::to_string(num);
-		start.checkAnswer(color);
-		for (int i = 10; i >=0;i--) {
-			cout << "Time left: " << i << endl;
-			Sleep(1000);
+		pattern.push_back(start.showPattern(color, num));
+		cout << "Pattern: ";
+		for (auto const znak : pattern) {
+			cout << znak;
 		}
+		cout << endl;
+		start.checkAnswer(color);
+		start.wait();
 	}
 }
 
