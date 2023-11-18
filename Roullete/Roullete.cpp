@@ -10,6 +10,7 @@
 #include "Game.h"
 #include <string>
 #include <vector>
+#include "Player.h"
 
 using std::cout;
 using std::cin;
@@ -20,11 +21,15 @@ int main()
 {
 	int num{},bet{};
 	string color;
+	float balance=1000;
 	std::vector<string> pattern;
 	std::random_device rd;
 	std::uniform_int_distribution<int>  dist(0, 36);
 	Game start;
+	Bet zaklad;
+	
 	while (1) {
+		Player account(balance);
 		start.choice();
 		//bet=start.choiceBet();
 		num = dist(rd);
@@ -38,8 +43,10 @@ int main()
 			cout << znak;
 		}
 		cout << endl;
-		start.checkAnswer(color);
-		start.wait();
+		start.checkAnswer(color,num);
+		balance=zaklad.multiplier(start.get_MainChoice(), start.get_isWin(), account.get_balace(), start.get_bet());
+		//start.wait();
+		cout << "Account balace: "<<account.get_balace() << endl;
 	}
 }
 
