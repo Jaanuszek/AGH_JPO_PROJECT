@@ -53,23 +53,13 @@ public:
 			break;
 		}
 	}
-	//int choiceBet() {
-	//	int bet{};
-	//	std::cout << "Insert your bet:";
-	//	std::cin >> bet;
-	//	if (!std::cin) {
-	//		std::cout << "Invalid input." << std::endl;
-	//	}
-	//	return bet; // w tej metodzie jest cos nie tak, bo jak daje sie cos innego niz cyfre to program sie wykrzacza
-	//}
-	void checkAnswer(std::string result,int numResult) { //sprawdza czy gracz dobrze postawi³
+	void checkAnswer(std::string result,bool isOdd, int numResult) { //sprawdza czy gracz dobrze postawi³
 		for (auto& i : fSideChoice) { //w razie gdyby ktos wpisal z duzych liter albo z malych i zeby nie wywalalo bledu
 			i = tolower(i);
 		}
 		for (auto& n : result) { //w razie gdyby ktos wpisal z duzych liter albo z malych i zeby nie wywalalo bledu
 			n = tolower(n);
 		}
-		int number = stoi(fSideChoice);//zeby zamienic string na int w przypadku wybrania liczby
 		if(fSideChoice == "red" || fSideChoice == "black" || fSideChoice == "green") {
 			if (result == fSideChoice) {
 				std::cout << "Win!" << std::endl;
@@ -80,8 +70,15 @@ public:
 				fisWin = 0;
 			}
 		}
-		else if (fSideChoice == "odd" || fSideChoice == "even") {
-			if (result == fSideChoice) {
+		else if (fSideChoice == "odd" || fSideChoice == "even") { // to chyba nie dziala
+			bool checkParityAnswer;
+			if (fSideChoice == "odd") {
+				checkParityAnswer = 1;
+			}
+			else if (fSideChoice == "even") {
+				checkParityAnswer = 0;
+			}
+			if (checkParityAnswer==isOdd) {
 				std::cout << "Win!" << std::endl;
 				fisWin = 1;
 			}
@@ -91,6 +88,7 @@ public:
 			}
 		}
 		else if (fMainChoice=='3') {
+			int number = stoi(fSideChoice);//zeby zamienic string na int w przypadku wybrania liczby 
 			if (numResult==number) {
 				std::cout << "Win!" << std::endl;
 				fisWin = 1;
@@ -99,7 +97,7 @@ public:
 				std::cout << "Try again!" << std::endl;
 				fisWin = 0;
 			}
-		}// dodac tutaj jeszcze warunek na te liczby
+		}
 		else {
 			std::cout << "Next time write proper answer!" << std::endl;
 		}
@@ -120,8 +118,12 @@ public:
 		//std::cout << std::endl;   //nie wiem dlaczego ale z vectorem to nie dziala, wrocic do tego!!!
 		std::string pattern;
 		pattern += col + " " + std::to_string(number)+ " ";
-		//std::cout << "Pattern: " << pattern <<std::endl;
 		return pattern;
+	}
+	void stop(float balance) { //gdy gracz nie ma kredytow, gra sie konczy
+		if (balance <= 0) {
+			exit(EXIT_SUCCESS);
+		}
 	}
 };
 

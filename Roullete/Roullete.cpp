@@ -25,11 +25,13 @@ int main()
 	std::vector<string> pattern;
 	std::random_device rd;
 	std::uniform_int_distribution<int>  dist(0, 36);
-	Game start;
-	Bet zaklad;
+	Game start; //Game.h
+	Bet zaklad; //Bet.h
 	
 	while (1) {
-		Player account(balance);
+		Player account(balance); //sprawdza na biezaco ilosc kredytow i aktualizuje co kazde wywolanie petli
+		start.stop(account.get_balace());
+		//cout << "Account balace: " << account.get_balace() << endl;
 		start.choice();
 		//bet=start.choiceBet();
 		num = dist(rd);
@@ -39,14 +41,13 @@ int main()
 		cout << color << endl;
 		pattern.push_back(start.showPattern(color, num));
 		cout << "Pattern: ";
-		for (auto const znak : pattern) {
+		for (auto const& znak : pattern) {
 			cout << znak;
 		}
 		cout << endl;
-		start.checkAnswer(color,num);
-		balance=zaklad.multiplier(start.get_MainChoice(), start.get_isWin(), account.get_balace(), start.get_bet());
+		start.checkAnswer(color,p.get_is_odd(), num); //tutaj nie ma wywolania czy liczba jest parzysta czy nie
+		balance = zaklad.multiplier(start.get_MainChoice(), start.get_isWin(), account.get_balace(), start.get_bet());
 		//start.wait();
-		cout << "Account balace: "<<account.get_balace() << endl;
 	}
 }
 

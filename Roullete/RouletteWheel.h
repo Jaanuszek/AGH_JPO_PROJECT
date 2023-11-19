@@ -5,23 +5,21 @@ private:
 	int fNumber{};
 	std::string fColour;
 	bool fIsOdd;
-	bool fIsEven;
 public:
-	RouletteWheel(int number = 0, std::string colour="", bool odd = 0, bool even = 0) : fNumber{number}, fColour{colour}, fIsOdd{odd}, fIsEven{even}
+	bool get_is_odd(void) const {
+		return fIsOdd;
+	}
+	RouletteWheel(int number = 0, std::string colour="", bool odd = 0, bool even = 0) : fNumber{number}, fColour{colour}, fIsOdd{odd}
 	{
 		std::cout << "The number drawn: " << number << std::endl;
 	}
 	std::string isOdd(const int number) {
 		if (number % 2 == 1) {
-			//std::cout << "odd" << std::endl;
 			fIsOdd = 1;
-			fIsEven = 0;
 			return "Odd";
 		}
 		if (number % 2 == 0) {
-			//std::cout << "even" << std::endl;
 			fIsOdd = 0;
-			fIsEven = 1;
 			return "Even";
 		}
 		else {
