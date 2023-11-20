@@ -28,7 +28,7 @@ int main()
 	Game start; //Game.h
 	Bet zaklad; //Bet.h
 	
-	while (1) {
+while (1) {
 		Player account(balance); //sprawdza na biezaco ilosc kredytow i aktualizuje co kazde wywolanie petli
 		start.stop(account.get_balace());
 		//cout << "Account balace: " << account.get_balace() << endl;
@@ -47,7 +47,7 @@ int main()
 		cout << endl;
 		start.checkAnswer(color,p.get_is_odd(), num); //tutaj nie ma wywolania czy liczba jest parzysta czy nie
 		balance = zaklad.multiplier(start.get_MainChoice(), start.get_isWin(), account.get_balace(), start.get_bet());
-		//start.wait();
+		start.wait();
 	}
 }
 

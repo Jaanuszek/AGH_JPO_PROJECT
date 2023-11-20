@@ -9,6 +9,7 @@ private:
 	std::string fSideChoice{};
 	std::string fCheck{};
 	bool fisWin = 0;
+	bool fisTimer = 1;
 public:
 	Game()
 	{}
@@ -17,6 +18,9 @@ public:
 	}
 	bool get_isWin(void) const {
 		return fisWin;
+	}
+	bool get_isTimer(void) const {
+		return fisTimer;
 	}
 	char get_MainChoice(void)const {
 		return fMainChoice;
@@ -27,32 +31,32 @@ public:
 		std::cout << "3. Number" << std::endl;
 		std::cout << "4. Quit" << std::endl;
 		std::cin >> fMainChoice;
-		switch (fMainChoice) {
-		case '1': // tutaj mozna zrobic mape, zeby nie pisac 123 itp tylko zeby1 znaczylo kolory 2 parzystosc itp (1.1)
-			std::cout << "Which colour? (Red, Black, Green)" << std::endl;
-			std::cin >> fSideChoice;
-			std::cout << "What is your bet? "<<std::endl;
-			std::cin >> fbet;
-			break;
-		case '2':
-			std::cout << "What parity? (Odd, Even)" << std::endl;
-			std::cin >> fSideChoice;
-			std::cout << "What is your bet? " << std::endl;
-			std::cin >> fbet;
-			break;
-		case '3':
-			std::cout << "What number?" << std::endl;
-			std::cin >> fSideChoice;
-			std::cout << "What is your bet? " << std::endl;
-			std::cin >> fbet;
-			break;
-		case '4':
-			exit(0);
-		default:
-			std::cout << "You did not make a decission" << std::endl;
-			break;
+			switch (fMainChoice) {
+			case '1': // tutaj mozna zrobic mape, zeby nie pisac 123 itp tylko zeby1 znaczylo kolory 2 parzystosc itp (1.1)
+				std::cout << "Which colour? (Red, Black, Green)" << std::endl;
+				std::cin >> fSideChoice;
+				std::cout << "What is your bet? " << std::endl;
+				std::cin >> fbet;
+				break;
+			case '2':
+				std::cout << "What parity? (Odd, Even)" << std::endl;
+				std::cin >> fSideChoice;
+				std::cout << "What is your bet? " << std::endl;
+				std::cin >> fbet;
+				break;
+			case '3':
+				std::cout << "What number?" << std::endl;
+				std::cin >> fSideChoice;
+				std::cout << "What is your bet? " << std::endl;
+				std::cin >> fbet;
+				break;
+			case '4':
+				exit(0);
+			default:
+				std::cout << "You did not make a decission" << std::endl;
+				break;
+			}
 		}
-	}
 	void checkAnswer(std::string result,bool isOdd, int numResult) { //sprawdza czy gracz dobrze postawi³
 		for (auto& i : fSideChoice) { //w razie gdyby ktos wpisal z duzych liter albo z malych i zeby nie wywalalo bledu
 			i = tolower(i);
@@ -102,11 +106,27 @@ public:
 			std::cout << "Next time write proper answer!" << std::endl;
 		}
 	}
-	void wait() {
-		for (int i = 10; i >= 0;i--) {
-			std::cout << "Time left: " << i << std::endl;
+	void wait() { //dodac obsluge w¹tków, by ten licznik sie wykonwal a uzytkownik mogl dalej sobie grac
+		std::cout << "Time left: ";
+		for (int i = 15; i >= 0;i--) {
+			fisTimer = 1;
+			if (i >= 10) { //tutaj jest robione, by ten timer dzialal w ten sposob ze zliacza czas w jednej lini
+				std::cout << '\b';
+				std::cout << '\b';
+			}
+			else if (i==9) {
+				std::cout << '\b';
+				std::cout << '\b';
+				std::cout << " ";
+			}
+			else {
+				std::cout << '\b';
+			}
+			std::cout << i;
 			Sleep(1000);
 		}
+		fisTimer = 0;
+		std::cout << std::endl;
 	}
 	std::string showPattern(std::string const col, int const number) {
 		//std::vector<string> pattern;
