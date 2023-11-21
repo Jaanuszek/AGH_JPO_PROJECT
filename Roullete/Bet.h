@@ -2,8 +2,6 @@
 class Bet
 {
 private:
-	//int fBet{}; // ile pieniedzy zostalo postawione
-	//int fChoice;
 public:
 	Bet()
 	{}

@@ -32,25 +32,21 @@ public:
 		auto findRed = find(vRed.begin(), vRed.end(), number);
 		auto findBlack = find(vBlack.begin(), vBlack.end(), number);
 		if (findRed != vRed.end()) {
-			//std::cout << "Red" << std::endl;
 			fColour = "Red";
 			return fColour;
 		}
 		else if (findBlack != vBlack.end()) {
 			fColour = "Black";
-			//std::cout << "Black" << std::endl;
 			return fColour;
 		}
 		else if (number == 0) {
 			fColour = "Green";
-			//std::cout << "Green" << std::endl;
 			return fColour;
 		}	
 		else {
 			return "Error";
 		}
 	}
-	// zrobic funkcje ktora zwraca wszystkie wyniki
 };
 
 
