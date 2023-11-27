@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <chrono>
 #include <thread>
 #include <conio.h>
@@ -17,6 +18,7 @@ private:
 	bool fUserDecided = 0;
 	bool fcheckParityAnswer=0;
 	bool fErrorHandler = 0;
+	std::vector<std::string> fpattern;
 public:
 	Game(int delayTime = 10): fDelayTime{delayTime}
 	{
@@ -54,23 +56,51 @@ public:
 		}
 		if (fUserDecided) {
 			switch (fMainChoice) {
-			case '1': // tutaj mozna zrobic mape, zeby nie pisac 123 itp tylko zeby1 znaczylo kolory 2 parzystosc itp (1.1)
+			case '1':
 				std::cout << "Which colour? (Red, Black, Green)" << std::endl;
 				std::cin >> fSideChoice;
 				std::cout << "What is your bet? " << std::endl;
-				std::cin >> fbet;
+				try {
+					std::cin >> fbet;
+					if (!isdigit(fbet)) { //ogarnac warunek dla floatów, albo przerobic program zeby kredyty i bety byly intami
+						std::cin.ignore(10000, '\n');
+						throw 125;
+					}
+				}
+				catch (int betErr) {
+					std::cout << "this is not a digit " <<"Error type: "<<betErr<< std::endl; //ogarnac dlaczego jak sie wpisuje bledna odpowiedz to program sie zapetla i nie da sie nic zrobic
+					//std::cin.ignore(10000, '\n');
+				}
 				break;
 			case '2':
 				std::cout << "What parity? (Odd, Even)" << std::endl;
 				std::cin >> fSideChoice;
 				std::cout << "What is your bet? " << std::endl;
-				std::cin >> fbet;
+				try {
+					std::cin >> fbet;
+					if (!isdigit(fbet)) {
+						std::cin.ignore(10000, '\n');
+						throw 125;
+					}
+				}
+				catch (int betErr) {
+					std::cout << "this is not a digit " << "Error type: " << betErr << std::endl;
+				}
 				break;
 			case '3':
 				std::cout << "What number?" << std::endl;
 				std::cin >> fSideChoice;
 				std::cout << "What is your bet? " << std::endl;
-				std::cin >> fbet;
+				try {
+					std::cin >> fbet;
+					if (!isdigit(fbet)) {
+						std::cin.ignore(10000, '\n');
+						throw 125;
+					}
+				}
+				catch (int betErr) {
+					std::cout << "this is not a digit " << "Error type: " << betErr << std::endl;
+				}
 				break;
 			case '4':
 				exit(0);
@@ -110,7 +140,6 @@ public:
 		for (auto& n : result) { //w razie gdyby ktos wpisal z duzych liter albo z malych i zeby nie wywalalo bledu
 			n = tolower(n);
 		}
-		//if(fSideChoice == "red" || fSideChoice == "black" || fSideChoice == "green") {
 		if (fMainChoice=='1') {
 			if (result == fSideChoice) {
 				std::cout << "Win!" << std::endl;
@@ -127,44 +156,60 @@ public:
 		}
 		//else if (fSideChoice == "odd" || fSideChoice == "even") { 
 		else if (fMainChoice=='2') {
-			if (fSideChoice == "odd") { //dodac obsluge bledow, ze jak sie wpisuje red w pole parity to wywaluje error
-				fcheckParityAnswer = 1;
+			try {
+				if (fSideChoice == "odd") { //dodac obsluge bledow, ze jak sie wpisuje red w pole parity to wywaluje error
+					fcheckParityAnswer = 1;
+				}
+				else if (fSideChoice == "even") {
+					fcheckParityAnswer = 0;
+				}
+				else {
+					throw 124;
+				}
+				if (fcheckParityAnswer == isOdd) {
+					std::cout << "Win!" << std::endl;
+					fisWin = 1;
+				}
+				else if (!fUserDecided) {
+					fisWin = 0;
+				}
+				else {
+					std::cout << "Try again!" << std::endl;
+					fisWin = 0;
+				}
 			}
-			else if (fSideChoice == "even") {
-				fcheckParityAnswer = 0;
+			catch (int parityError) {
+				std::cout << "This is not proper answer" <<"Error type:"<<parityError<< std::endl;
 			}
-			else {
-				std::cout << "This is not proper answer" << std::endl;
-				fErrorHandler=1;
-			}
-			if (fcheckParityAnswer == isOdd) {
-				std::cout << "Win!" << std::endl;
-				fisWin = 1;
-			}
-			else if (!fUserDecided) {
-				fisWin = 0;
-			}
-			else if (fErrorHandler=1) {
-				fisWin = 0;
-			}
-			else {
-				std::cout << "Try again!" << std::endl;
-				fisWin = 0;
-			}
-
 		}
 		else if (fMainChoice=='3') {
 			// tutaj dodac try catch funkcje zeby obsluzyc blad gdyby uzytkownik zamiast liczby wpisal cos innego glupiego,. ale zostawie to bo na jpo tera to bedziemy miec
-			int number = stoi(fSideChoice);//zeby zamienic string na int w przypadku wybrania liczby 
-			if (numResult==number) { 
-				std::cout << "Win!" << std::endl;
-				fisWin = 1;
+			int number{};
+			try {
+				int number = stoi(fSideChoice);//zeby zamienic string na int w przypadku wybrania liczby 
+				if (number < 0 || number>36) {
+					throw 123;
+				}
+				if (numResult == number) {
+					std::cout << "Win!" << std::endl;
+					fisWin = 1;
+				}
+				else if (!fUserDecided) {
+					fisWin = 0;
+				}
+				else {
+					std::cout << "Try again!" << std::endl;
+					fisWin = 0;
+				}
 			}
-			else if (!fUserDecided) {
-				fisWin = 0;
+			catch (const std::invalid_argument& ia) {
+				std::cerr << "Invalid argument: " << ia.what() << std::endl;
 			}
-			else {
-				std::cout << "Try again!" << std::endl;
+			catch (const std::out_of_range& oor) {
+				std::cerr << "Out of Range error:" << oor.what() << std::endl;
+			}
+			catch (int rangeErr) {
+				std::cout << "The number is out of range (0-36)"<<"Error type:"<<rangeErr<<std::endl;
 				fisWin = 0;
 			}
 		}
@@ -173,32 +218,36 @@ public:
 		}
 	}
 	//chyba o to mozna usunac
-	void wait() { //dodac obsluge w¹tków, by ten licznik sie wykonwal a uzytkownik mogl dalej sobie grac
-		std::cout << "Time left: ";
-		for (int i = 15; i >= 0;i--) {
-			fisTimer = 1;
-			if (i >= 10) { //tutaj jest robione, by ten timer dzialal w ten sposob ze zliacza czas w jednej lini
-				std::cout << '\b';
-				std::cout << '\b';
-			}
-			else if (i==9) {
-				std::cout << '\b';
-				std::cout << '\b';
-				std::cout << " ";
-			}
-			else {
-				std::cout << '\b';
-			}
-			std::cout << i;
-			Sleep(1000);
-		}
-		fisTimer = 0;
-		std::cout << std::endl;
-	}
-	std::string showPattern(std::string const col, int const number) {
+	//void wait() { //dodac obsluge w¹tków, by ten licznik sie wykonwal a uzytkownik mogl dalej sobie grac
+	//	std::cout << "Time left: ";
+	//	for (int i = 15; i >= 0;i--) {
+	//		fisTimer = 1;
+	//		if (i >= 10) { //tutaj jest robione, by ten timer dzialal w ten sposob ze zliacza czas w jednej lini
+	//			std::cout << '\b';
+	//			std::cout << '\b';
+	//		}
+	//		else if (i==9) {
+	//			std::cout << '\b';
+	//			std::cout << '\b';
+	//			std::cout << " ";
+	//		}
+	//		else {
+	//			std::cout << '\b';
+	//		}
+	//		std::cout << i;
+	//		Sleep(1000);
+	//	}
+	//	fisTimer = 0;
+	//	std::cout << std::endl;
+	//}
+	void savePattern(std::string const col, int const number) {
 		std::string pattern;
 		pattern += col + " " + std::to_string(number)+ " ";
-		return pattern;
+		fpattern.push_back(pattern);
+		for (auto const& i : fpattern) {
+			std::cout << i;
+		}
+		std::cout << std::endl;
 	}
 	void stop(float balance) { //gdy gracz nie ma kredytow, gra sie konczy
 		if (balance <= 0) {
