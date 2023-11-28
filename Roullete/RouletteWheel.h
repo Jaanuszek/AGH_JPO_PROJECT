@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 class RouletteWheel //klasa odpowiadaj¹ca za ko³o ruletki
 {
 private:

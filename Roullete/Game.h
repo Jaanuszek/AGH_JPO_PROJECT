@@ -37,6 +37,9 @@ public:
 	char get_MainChoice(void)const {
 		return fMainChoice;
 	}
+	std::string get_SideChoice(void)const {
+		return fSideChoice;
+	}
 	void choice() { //wybor 
 		fUserDecided = false;
 		//start licznika czasu
@@ -217,33 +220,13 @@ public:
 			std::cout << "Next time write proper answer!" << std::endl;
 		}
 	}
-	//chyba o to mozna usunac
-	//void wait() { //dodac obsluge w¹tków, by ten licznik sie wykonwal a uzytkownik mogl dalej sobie grac
-	//	std::cout << "Time left: ";
-	//	for (int i = 15; i >= 0;i--) {
-	//		fisTimer = 1;
-	//		if (i >= 10) { //tutaj jest robione, by ten timer dzialal w ten sposob ze zliacza czas w jednej lini
-	//			std::cout << '\b';
-	//			std::cout << '\b';
-	//		}
-	//		else if (i==9) {
-	//			std::cout << '\b';
-	//			std::cout << '\b';
-	//			std::cout << " ";
-	//		}
-	//		else {
-	//			std::cout << '\b';
-	//		}
-	//		std::cout << i;
-	//		Sleep(1000);
-	//	}
-	//	fisTimer = 0;
-	//	std::cout << std::endl;
-	//}
 	void savePattern(std::string const col, int const number) {
 		std::string pattern;
-		pattern += col + " " + std::to_string(number)+ " ";
+		pattern += col + " " + std::to_string(number) + " ";
 		fpattern.push_back(pattern);
+		if (fpattern.size() > 4) {
+			fpattern.erase(fpattern.begin());
+		}
 		for (auto const& i : fpattern) {
 			std::cout << i;
 		}
