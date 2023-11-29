@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <conio.h>
+
 class Game
 {
 private:
@@ -22,8 +23,10 @@ private:
 public:
 	Game(int delayTime = 10): fDelayTime{delayTime}
 	{
+		std::cout << "**********************************************************************" << std::endl;
 		std::cout << "Welcome to roulette game!" << std::endl;
 		std::cout << "Please make your decission in 5 sek" << std::endl;
+		std::cout << "**********************************************************************" << std::endl;
 	}
 	float get_bet(void)const {
 		return fbet;
@@ -39,6 +42,20 @@ public:
 	}
 	std::string get_SideChoice(void)const {
 		return fSideChoice;
+	}
+	void choseBet() {
+		std::cout << "What is your bet? " << std::endl;
+		try {
+			std::cin >> fbet;
+			if (!isdigit(fbet)) {
+				std::cin.clear();
+				std::cin.ignore(10000, '\n');
+				throw 125;
+			}
+		}
+		catch (int betErr) {
+			std::cout << "This is wrong bet!! " << "Error type: " << betErr << std::endl;
+		}
 	}
 	void choice() { //wybor 
 		fUserDecided = false;
@@ -62,48 +79,17 @@ public:
 			case '1':
 				std::cout << "Which colour? (Red, Black, Green)" << std::endl;
 				std::cin >> fSideChoice;
-				std::cout << "What is your bet? " << std::endl;
-				try {
-					std::cin >> fbet;
-					if (!isdigit(fbet)) { //ogarnac warunek dla floatów, albo przerobic program zeby kredyty i bety byly intami
-						std::cin.ignore(10000, '\n');
-						throw 125;
-					}
-				}
-				catch (int betErr) {
-					std::cout << "this is not a digit " <<"Error type: "<<betErr<< std::endl; //ogarnac dlaczego jak sie wpisuje bledna odpowiedz to program sie zapetla i nie da sie nic zrobic
-					//std::cin.ignore(10000, '\n');
-				}
+				choseBet();
 				break;
 			case '2':
 				std::cout << "What parity? (Odd, Even)" << std::endl;
 				std::cin >> fSideChoice;
-				std::cout << "What is your bet? " << std::endl;
-				try {
-					std::cin >> fbet;
-					if (!isdigit(fbet)) {
-						std::cin.ignore(10000, '\n');
-						throw 125;
-					}
-				}
-				catch (int betErr) {
-					std::cout << "this is not a digit " << "Error type: " << betErr << std::endl;
-				}
+				choseBet();
 				break;
 			case '3':
 				std::cout << "What number?" << std::endl;
 				std::cin >> fSideChoice;
-				std::cout << "What is your bet? " << std::endl;
-				try {
-					std::cin >> fbet;
-					if (!isdigit(fbet)) {
-						std::cin.ignore(10000, '\n');
-						throw 125;
-					}
-				}
-				catch (int betErr) {
-					std::cout << "this is not a digit " << "Error type: " << betErr << std::endl;
-				}
+				choseBet();
 				break;
 			case '4':
 				exit(0);
@@ -148,8 +134,9 @@ public:
 				std::cout << "Win!" << std::endl;
 				fisWin = 1;
 			}
-			else if (!fUserDecided) {
+			else if (!fUserDecided || fSideChoice != "red"|| fSideChoice !="black"||fSideChoice!="green") {
 				fisWin = 0;
+				fbet = 0; //w razie zlego wyboru nie pobiera kredytow
 			}
 			else {
 				std::cout << "Try again!" << std::endl;
@@ -157,7 +144,6 @@ public:
 			}
 			
 		}
-		//else if (fSideChoice == "odd" || fSideChoice == "even") { 
 		else if (fMainChoice=='2') {
 			try {
 				if (fSideChoice == "odd") { //dodac obsluge bledow, ze jak sie wpisuje red w pole parity to wywaluje error
@@ -182,7 +168,8 @@ public:
 				}
 			}
 			catch (int parityError) {
-				std::cout << "This is not proper answer" <<"Error type:"<<parityError<< std::endl;
+				std::cout << "This is not proper answer" <<" Error type:"<<parityError<< std::endl;
+				fbet = 0;
 			}
 		}
 		else if (fMainChoice=='3') {
@@ -207,13 +194,16 @@ public:
 			}
 			catch (const std::invalid_argument& ia) {
 				std::cerr << "Invalid argument: " << ia.what() << std::endl;
+				fbet = 0;
 			}
 			catch (const std::out_of_range& oor) {
 				std::cerr << "Out of Range error:" << oor.what() << std::endl;
+				fbet = 0;
 			}
 			catch (int rangeErr) {
 				std::cout << "The number is out of range (0-36)"<<"Error type:"<<rangeErr<<std::endl;
 				fisWin = 0;
+				fbet = 0;
 			}
 		}
 		else {

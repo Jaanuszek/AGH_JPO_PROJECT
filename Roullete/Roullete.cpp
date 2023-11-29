@@ -13,6 +13,7 @@
 #include "Player.h"
 #include <chrono>
 #include <thread>
+#include <limits>
 
 using std::cout;
 using std::cin;
@@ -35,7 +36,7 @@ while (1) {
 		Player account(balance); //sprawdza na biezaco ilosc kredytow i aktualizuje co kazde wywolanie petli
 		start.stop(account.get_balace());
 		start.choice();
-		num = dist(rd);
+		num = dist(rd); //to losowanie liczb raczej ogarnac w jakies klasie najlepiej w RouletteWheel
 		RouletteWheel p(num);
 		cout << "Parity: " << p.isOdd(num) << endl;;
 		color = p.color(num);
@@ -45,7 +46,7 @@ while (1) {
 		start.checkAnswer(color, p.get_is_odd(), num); //tutaj nie ma wywolania czy liczba jest parzysta czy nie
 		balance = zaklad.multiplier(start.get_MainChoice(),start.get_SideChoice(), start.get_isWin(), account.get_balace(), start.get_bet());
 		//zrobic funkcje ktora wypisuje wybor gracza !!!!!!!!!
-		//start.wait();
+		//zrobic zeby to ladniej wygladalo, ale nie mam pojecia jak do tego sie zabrac
 	}
 }
 
