@@ -134,7 +134,8 @@ public:
 				std::cout << "Win!" << std::endl;
 				fisWin = 1;
 			}
-			else if (!fUserDecided || fSideChoice != "red"|| fSideChoice !="black"||fSideChoice!="green") {
+			else if (!fUserDecided || fSideChoice != "red"|| fSideChoice != "black"||fSideChoice!= "green") {
+				// tu jest jakis blad bo jak sie wybierze np red a wynik to black to i tak przechodzi do tej instrukcji warunkowej
 				fisWin = 0;
 				fbet = 0; //w razie zlego wyboru nie pobiera kredytow
 			}
