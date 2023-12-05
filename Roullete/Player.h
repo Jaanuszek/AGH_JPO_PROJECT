@@ -1,4 +1,11 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
+
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 class Player
 {
 private:
@@ -8,4 +15,4 @@ public:
 
 	float get_balace(void)const;
 };
-
+#endif 

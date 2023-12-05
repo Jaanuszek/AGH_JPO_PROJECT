@@ -3,43 +3,43 @@
 
 //#include "RouletteWheel.h"
 #include <iostream>
-#include <random>
-#include <windows.h>
+//#include <random>
+//#include <windows.h>
 #include "RouletteWheel.h"
 #include "Bet.h"
 #include "Game.h"
 #include <string>
 #include <vector>
 #include "Player.h"
-#include <chrono>
-#include <thread>
-#include <limits>
+//#include <chrono>
+//#include <thread>
+//#include <limits>
 
 using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
-//using namespace std;
+
 int main()
 {
 	int num{},bet{};
 	string color;
 	float balance=1000;
-	std::vector<string> pattern;
-	std::random_device rd;
-	std::uniform_int_distribution<int>  dist(0, 36);
+	vector<string> pattern;
 	Game start(5); //Game.h
 	Bet zaklad; //Bet.h
+	RouletteWheel p;
 
 	
 while (1) {
 		Player account(balance); //sprawdza na biezaco ilosc kredytow i aktualizuje co kazde wywolanie petli
 		start.stop(account.get_balace());
-		start.choice();
-		num = dist(rd); //to losowanie liczb raczej ogarnac w jakies klasie najlepiej w RouletteWheel
-		RouletteWheel p(num);
-		cout << "Parity: " << p.isOdd(num) << endl;;
-		color = p.color(num);
+		start.choice(account.get_balace());
+		p.randomNumber();
+		num = p.get_number();
+		p.showNumber();
+		cout << "Parity: " << p.isOdd() << endl;;
+		color = p.color();
 		cout << color << endl;
 		cout << "Pattern: ";
 		start.savePattern(color, num); // zeby zapisac poprzedni lo
