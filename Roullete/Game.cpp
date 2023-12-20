@@ -19,11 +19,22 @@
 	}
 	char Game::get_MainChoice(void)const {
 		return fMainChoice;
+
 	}
 	string Game::get_SideChoice(void)const {
 		return fSideChoice;
 	}
-	void Game::choseBet(int balance) {
+	void Game::profitLoss(float balance) {
+		if (fisWin == 1) {
+			// bo na pocz¹tku zmienna result ma wartosc 0 i jak sie wygra to sie wyswietla ze sie wygralo 0 dlatego to zabezpiecza przed tym zjawiskiem
+			cout << "(+" << foldBalance-balance << ")" << endl; 
+		}
+		else {
+			cout << "(-" << fbet << ")"<<endl;
+		}
+	}
+	void Game::choseBet(float balance) {
+		foldBalance = balance; // zrobic tak zeby sie zapisywala do tej zmiennej ilosc kredytow ile bylo przed postawieniem beta !!!!!!!!!!!!!!!!!!
 		cout << "What is your bet? " << endl;
 		try {
 			cin >> fbet;
@@ -50,7 +61,7 @@
 			cerr << ex << endl;
 		}
 	}
-	void Game::choice(int accBalance) { //wybor 
+	void Game::choice(float accBalance) { //wybor 
 		fUserDecided = false;
 		//start licznika czasu
 		auto start_time = std::chrono::high_resolution_clock::now();
@@ -115,7 +126,7 @@
 			fbet = 0;
 		}
 	}
-	void Game::checkAnswer(string result, bool isOdd, int numResult) { //sprawdza czy gracz dobrze postawi³
+	void Game::checkAnswer(string result, bool isOdd, int numResult, float balance ) { //sprawdza czy gracz dobrze postawi³
 		for (auto& i : fSideChoice) { //w razie gdyby ktos wpisal z duzych liter albo z malych i zeby nie wywalalo bledu
 			i = tolower(i);
 		}
@@ -124,16 +135,18 @@
 		}
 		if (fMainChoice == '1') {
 			if (result == fSideChoice) {
-				cout << "Win!" << endl;
 				fisWin = 1;
+				cout << "Win!";
+				profitLoss(balance);
 			}
 			else if (!fUserDecided||fErrorHandler==1) {
 				fisWin = 0;
 				fbet = 0; //w razie zlego wyboru nie pobiera kredytow
 			}
 			else if(fSideChoice== "red"|| fSideChoice == "black"|| fSideChoice == "green") {
-				cout << "Try again!" << endl;
 				fisWin = 0;
+				cout << "Try again!";
+				profitLoss(balance);
 			}
 			else {
 				fisWin = 0;
@@ -153,16 +166,18 @@
 					throw 124;
 				}
 				if (fcheckParityAnswer == isOdd) {
-					cout << "Win!" << endl;
 					fisWin = 1;
+					cout << "Win!";
+					profitLoss(balance);
 				}
 				else if (!fUserDecided || fErrorHandler == 1) {
 					fisWin = 0;
 					fbet = 0;
 				}
 				else {
-					cout << "Try again!" << endl;
 					fisWin = 0;
+					cout << "Try again!";
+					profitLoss(balance);
 				}
 			}
 			catch (int parityError) {
@@ -179,16 +194,18 @@
 					throw 123;
 				}
 				if (numResult == number) {
-					cout << "Win!" << endl;
 					fisWin = 1;
+					cout << "Win!";
+					profitLoss(balance);
 				}
 				else if (!fUserDecided || fErrorHandler == 1) {
 					fisWin = 0;
 					fbet = 0;
 				}
 				else {
-					cout << "Try again!" << endl;
 					fisWin = 0;
+					cout << "Try again!";
+					profitLoss(balance);
 				}
 			}
 			catch (const std::invalid_argument& ia) {

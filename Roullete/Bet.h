@@ -8,9 +8,11 @@ using std::string;
 class Bet
 {
 private:
+	float fresult{};
 public:
 	Bet()
 	{}
+	float get_result(void);
 	float multiplier(char mainChoice, std::string sideChoice, bool isWin, float balance, float betValue);
 };
 #endif //koniec bloku warunkowego

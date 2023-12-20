@@ -43,7 +43,7 @@ while (1) {
 		cout << color << endl;
 		cout << "Pattern: ";
 		start.savePattern(color, num); // zeby zapisac poprzedni lo
-		start.checkAnswer(color, p.get_is_odd(), num); //tutaj nie ma wywolania czy liczba jest parzysta czy nie
+		start.checkAnswer(color, p.get_is_odd(), num,account.get_balace()); //tutaj nie ma wywolania czy liczba jest parzysta czy nie
 		balance = zaklad.multiplier(start.get_MainChoice(),start.get_SideChoice(), start.get_isWin(), account.get_balace(), start.get_bet());
 		//zrobic funkcje ktora wypisuje wybor gracza !!!!!!!!!
 		//zrobic zeby to ladniej wygladalo, ale nie mam pojecia jak do tego sie zabrac
