@@ -5,7 +5,7 @@
 	{
 		cout << "**********************************************************************" << endl;
 		cout << "Welcome to roulette game!" << endl;
-		cout << "Please make your decission in 5 sek" << endl;
+		cout << "Please make your decission in "<<delayTime<< " sek" << endl;
 		cout << "**********************************************************************" << endl;
 	}
 	float Game::get_bet(void)const {
@@ -24,17 +24,15 @@
 	string Game::get_SideChoice(void)const {
 		return fSideChoice;
 	}
-	void Game::profitLoss(float balance) {
+	void Game::profitLoss(const float& balance) {
 		if (fisWin == 1) {
-			// bo na pocz¹tku zmienna result ma wartosc 0 i jak sie wygra to sie wyswietla ze sie wygralo 0 dlatego to zabezpiecza przed tym zjawiskiem
-			cout << "(+" << foldBalance-balance << ")" << endl; 
+			cout << "(+" << balance << ")" << endl; 
 		}
 		else {
 			cout << "(-" << fbet << ")"<<endl;
 		}
 	}
-	void Game::choseBet(float balance) {
-		foldBalance = balance; // zrobic tak zeby sie zapisywala do tej zmiennej ilosc kredytow ile bylo przed postawieniem beta !!!!!!!!!!!!!!!!!!
+	void Game::choseBet(const float& balance) {
 		cout << "What is your bet? " << endl;
 		try {
 			cin >> fbet;
@@ -61,7 +59,7 @@
 			cerr << ex << endl;
 		}
 	}
-	void Game::choice(float accBalance) { //wybor 
+	void Game::choice(const float& accBalance) { //wybor 
 		fUserDecided = false;
 		//start licznika czasu
 		auto start_time = std::chrono::high_resolution_clock::now();
@@ -71,7 +69,7 @@
 			cout << "2. Parity" << endl;
 			cout << "3. Number" << endl;
 			cout << "4. Quit" << endl;
-			cin >> fMainChoice; //problemem jest ten cin bo sie blokuje
+			cin >> fMainChoice;
 			auto end = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double> dur = end - start_time;
 			if (dur < std::chrono::seconds(fDelayTime)) { // sprawdza czy uzytkownik dokonal wyboru w ci¹gu 5 sekund, jezeli nie to wypisuje na ekranie ze nic nie wybral
@@ -126,7 +124,7 @@
 			fbet = 0;
 		}
 	}
-	void Game::checkAnswer(string result, bool isOdd, int numResult, float balance ) { //sprawdza czy gracz dobrze postawi³
+	void Game::checkAnswer(string result, bool isOdd, const int& numResult) { //sprawdza czy gracz dobrze postawi³
 		for (auto& i : fSideChoice) { //w razie gdyby ktos wpisal z duzych liter albo z malych i zeby nie wywalalo bledu
 			i = tolower(i);
 		}
@@ -137,7 +135,6 @@
 			if (result == fSideChoice) {
 				fisWin = 1;
 				cout << "Win!";
-				profitLoss(balance);
 			}
 			else if (!fUserDecided||fErrorHandler==1) {
 				fisWin = 0;
@@ -146,7 +143,6 @@
 			else if(fSideChoice== "red"|| fSideChoice == "black"|| fSideChoice == "green") {
 				fisWin = 0;
 				cout << "Try again!";
-				profitLoss(balance);
 			}
 			else {
 				fisWin = 0;
@@ -168,7 +164,6 @@
 				if (fcheckParityAnswer == isOdd) {
 					fisWin = 1;
 					cout << "Win!";
-					profitLoss(balance);
 				}
 				else if (!fUserDecided || fErrorHandler == 1) {
 					fisWin = 0;
@@ -177,7 +172,6 @@
 				else {
 					fisWin = 0;
 					cout << "Try again!";
-					profitLoss(balance);
 				}
 			}
 			catch (int parityError) {
@@ -196,7 +190,6 @@
 				if (numResult == number) {
 					fisWin = 1;
 					cout << "Win!";
-					profitLoss(balance);
 				}
 				else if (!fUserDecided || fErrorHandler == 1) {
 					fisWin = 0;
@@ -205,7 +198,6 @@
 				else {
 					fisWin = 0;
 					cout << "Try again!";
-					profitLoss(balance);
 				}
 			}
 			catch (const std::invalid_argument& ia) {
@@ -226,7 +218,7 @@
 			cout << "Next time write proper answer!" << endl;
 		}
 	}
-	void Game::savePattern(string const col, int const number) {
+	void Game::savePattern(const string& col, const int& number) {
 		string pattern;
 		pattern += col + " " + std::to_string(number) + " ";
 		fpattern.push_back(pattern);
@@ -238,7 +230,7 @@
 		}
 		cout << endl;
 	}
-	void Game::stop(float balance) { //gdy gracz nie ma kredytow, gra sie konczy
+	void Game::stop(const float& balance) { //gdy gracz nie ma kredytow, gra sie konczy
 		if (balance <= 0) {
 			exit(EXIT_SUCCESS);
 		}

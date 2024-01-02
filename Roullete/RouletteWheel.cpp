@@ -51,10 +51,6 @@ string RouletteWheel::color() {
 	}
 }
 
-//RouletteWheel::RouletteWheel() : dist(0, 36) {};
-
-
-
  void RouletteWheel::showNumber(void) const{
 	cout << "Number Drawn: " << fNumber << endl;
 }

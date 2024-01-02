@@ -29,14 +29,10 @@ public:
 
 	void randomNumber();
 
-	//std::string isOdd(const int number);
 	std::string isOdd();
 
-	//std::string color(const int number);
 	std::string color();
 
-
-	//void showNumber(const int number);
 	void showNumber(void) const;
 };
 #endif

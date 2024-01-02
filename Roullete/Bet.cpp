@@ -1,10 +1,10 @@
 #include "Bet.h"
 
-float Bet::get_result() {
+float Bet::get_result(void) const{
 	return fresult;
 }
 
-float Bet::multiplier(char mainChoice, string sideChoice, bool isWin, float balance, float betValue) {
+float Bet::multiplier(const char& mainChoice, const string & sideChoice, const bool& isWin, float balance, const float& betValue) {
 
 	if (mainChoice == '1' && isWin == 1) {
 		if (sideChoice == "green") {
@@ -20,7 +20,7 @@ float Bet::multiplier(char mainChoice, string sideChoice, bool isWin, float bala
 		fresult = betValue * 2;//mnoznik 2 w przypadku parzystosci
 		return balance += fresult;
 	}
-	else if (mainChoice = '3' && isWin == 1) { //sprawdzic czy to dziala
+	else if (mainChoice == '3' && isWin == 1) { //sprawdzic czy to dziala
 		fresult = betValue * 10;//mnoznik 35 w przypadku wybrania dobrej liczby
 		return balance += fresult;
 	}

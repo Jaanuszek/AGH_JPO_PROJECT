@@ -12,7 +12,7 @@ private:
 public:
 	Bet()
 	{}
-	float get_result(void);
-	float multiplier(char mainChoice, std::string sideChoice, bool isWin, float balance, float betValue);
+	float get_result(void) const;
+	float multiplier(const char& mainChoice, const std::string& sideChoice, const bool& isWin, float balance, const float& betValue);
 };
 #endif //koniec bloku warunkowego

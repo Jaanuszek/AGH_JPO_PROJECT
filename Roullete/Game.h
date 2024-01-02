@@ -20,7 +20,7 @@ class Game
 private:
 	int fChoice{};
 	int fDelayTime{};
-	int fbet{};
+	float fbet{};
 	char fMainChoice{};
 	std::string fSideChoice{};
 	std::string fCheck{};
@@ -30,7 +30,6 @@ private:
 	bool fcheckParityAnswer=0;
 	bool fErrorHandler = 0;
 	std::vector<std::string> fpattern;
-	float foldBalance{};
 public:
 	Game(int delayTime = 10);
 	float get_bet(void)const;
@@ -38,11 +37,11 @@ public:
 	bool get_isTimer(void) const;
 	char get_MainChoice(void)const;
 	std::string get_SideChoice(void)const;
-	void profitLoss(float balance);
-	void choseBet(float balance);
-	void choice(float accBalance);
-	void checkAnswer(std::string result, bool isOdd, int numResult, float outcome);
-	void savePattern(std::string const col, int const number);
-	void stop(float balance);
+	void profitLoss(const float& balance);
+	void choseBet(const float& balance);
+	void choice(const float& accBalance);
+	void checkAnswer(std::string result, bool isOdd, const int& numResult);
+	void savePattern(const std::string& col, const int& number);
+	void stop(const float& balance);
 };
 #endif
