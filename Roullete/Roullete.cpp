@@ -1,10 +1,10 @@
 ﻿
 #include <iostream>
+#include <string>
+#include <vector>
 #include "RouletteWheel.h"
 #include "Bet.h"
 #include "Game.h"
-#include <string>
-#include <vector>
 #include "Player.h"
 
 using std::cout;

@@ -14,17 +14,13 @@
 	bool Game::get_isWin(void) const {
 		return fisWin;
 	}
-	bool Game::get_isTimer(void) const {
-		return fisTimer;
-	}
 	char Game::get_MainChoice(void)const {
 		return fMainChoice;
-
 	}
 	string Game::get_SideChoice(void)const {
 		return fSideChoice;
 	}
-	void Game::profitLoss(const float& balance) {
+	void Game::profitLoss(const float& balance) const{
 		if (fisWin == 1) {
 			cout << "(+" << balance << ")" << endl; 
 		}
