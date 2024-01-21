@@ -12,7 +12,8 @@ private:
 public:
 	Bet()
 	{}
-	float get_result(void) const;
+	float get_result(void) const; // Funkcja zwracaj¹ca zmienn¹ fresult bêd¹c¹ wartoœci¹ wygranej po zastosowaniu mno¿nika
+	// Funkcja zwracaj¹ca bilans kredytów po wygranej/przegranej
 	float multiplier(const char& mainChoice, const std::string& sideChoice, const bool& isWin, float balance, const float& betValue);
 };
 #endif //koniec bloku warunkowego

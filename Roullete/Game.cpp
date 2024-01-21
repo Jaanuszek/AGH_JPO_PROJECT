@@ -1,11 +1,11 @@
 #include "Game.h"
 
 
-	Game::Game(int delayTime) : fDelayTime{ delayTime }
+	Game::Game()
 	{
 		cout << "**********************************************************************" << endl;
 		cout << "Welcome to roulette game!" << endl;
-		cout << "Please make your decission in "<<delayTime<< " sek" << endl;
+		cout << "Choose your bet please:" << endl;
 		cout << "**********************************************************************" << endl;
 	}
 	float Game::get_bet(void)const {
@@ -24,7 +24,7 @@
 		if (fisWin == 1) {
 			cout << "(+" << balance << ")" << endl; 
 		}
-		else {
+		else{
 			cout << "(-" << fbet << ")"<<endl;
 		}
 	}
@@ -35,6 +35,7 @@
 			if (cin.fail()) { // iswdigit, bo zwykle isdigit jest do 255
 				cin.clear();
 				cin.ignore(10000, '\n');
+				fErrorHandler = 1;
 				throw 125;
 			}
 			if (fbet > balance) {
@@ -54,39 +55,68 @@
 			fbet = 0;
 			cerr << ex << endl;
 		}
+		system("CLS");
 	}
 	void Game::choice(const float& accBalance) { //wybor 
 		fUserDecided = false;
-		//start licznika czasu
-		auto start_time = std::chrono::high_resolution_clock::now();
-		//petla ktora sprawdza czy uzytkownik cos wpisal, jezeli nie to sprawdza czy uplyn¹³ czas, jezeli tak to petla sie przerywa
-		while (!fUserDecided && std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - start_time).count() < fDelayTime) {
+		while (!fUserDecided) {
 			cout << "1. Colour" << endl;
 			cout << "2. Parity" << endl;
 			cout << "3. Number" << endl;
 			cout << "4. Quit" << endl;
-			cin >> fMainChoice;
-			auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double> dur = end - start_time;
-			if (dur < std::chrono::seconds(fDelayTime)) { // sprawdza czy uzytkownik dokonal wyboru w ci¹gu 5 sekund, jezeli nie to wypisuje na ekranie ze nic nie wybral
-				fUserDecided = true;
+			try{
+				cin >> fMainChoice;
+				if (fMainChoice == '1' || fMainChoice == '2' || fMainChoice == '3' || fMainChoice == '4') {
+					fUserDecided = true;
+				}
+				else {
+					throw "Wrong option!";
+				}
+			}
+			catch(const char* choiceError){
+				fErrorHandler = 1;
+				fbet = 0;
+				system("CLS");
+				cerr << choiceError<<endl;
+				break;
 			}
 		}
 		if (fUserDecided) {
 			switch (fMainChoice) {
 			case '1':
 				cout << "Which colour? (Red, Black, Green)" << endl;
+				cout << "Type BACK to return to main menu"  << endl;
 				cin >> fSideChoice;
+				fSideChoice = lowerCase(fSideChoice);
+				if (fSideChoice == "back") {
+					fBack = 1;
+					system("CLS");
+					break;
+				}
 				choseBet(accBalance);
 				break;
 			case '2':
 				cout << "What parity? (Odd, Even)" <<endl;
+				cout << "Type BACK to return to main menu" << endl;
 				cin >> fSideChoice;
+				fSideChoice = lowerCase(fSideChoice);
+				if (fSideChoice == "back") {
+					fBack = 1;
+					system("CLS");
+					break;
+				}
 				choseBet(accBalance);
 				break;
 			case '3':
 				cout << "What number?" << endl;
+				cout << "Type BACK to return to main menu" << endl;
 				cin >> fSideChoice;
+				fSideChoice = lowerCase(fSideChoice);
+				if (fSideChoice == "back") {
+					fBack = 1;
+					system("CLS");
+					break;
+				}
 				choseBet(accBalance);
 				break;
 			case '4':
@@ -95,38 +125,10 @@
 				cout << "You did not make a decission" << endl;
 				break;
 			}
-			//koniec licznika czasu
-			auto end_time = std::chrono::high_resolution_clock::now();
-			//jak dlugo zajelo podjecie decyzji graczu
-			std::chrono::duration<double> duration = end_time - start_time;
-			//opoznienie jakie nalezy dodac po wyborze gracza
-			auto delay = std::chrono::seconds(fDelayTime) - duration;
-			// zaokraglenie opoznienia by nie bylo liczb jak na przyklad 3,857483s
-			delay = std::chrono::round<std::chrono::seconds>(delay);
-			//petla ktora wypisuje pozostaly czas
-			cout << "Time remaining:";
-			while (delay > std::chrono::seconds(0)) {
-				cout << delay << '\b' << '\b';
-				delay = delay - std::chrono::seconds(1);
-				// funkcja sleep ktora opoznia petle o 1 sekunde
-				std::this_thread::sleep_for(std::chrono::seconds(1));
-			}
-			cout << '\n';
-			system("CLS");
-		}
-		else if (!fUserDecided) {
-			cout << "You did not type your choice in time!" << endl;
-			fSideChoice = "";
-			fbet = 0;
 		}
 	}
 	void Game::checkAnswer(string result, bool isOdd, const int& numResult) { //sprawdza czy gracz dobrze postawi³
-		for (auto& i : fSideChoice) { //w razie gdyby ktos wpisal z duzych liter albo z malych i zeby nie wywalalo bledu
-			i = tolower(i);
-		}
-		for (auto& n : result) { //w razie gdyby ktos wpisal z duzych liter albo z malych i zeby nie wywalalo bledu
-			n = tolower(n);
-		}
+		result=lowerCase(result);
 		if (fMainChoice == '1') {
 			if (result == fSideChoice) {
 				fisWin = 1;
@@ -147,71 +149,74 @@
 
 		}
 		else if (fMainChoice == '2') {
-			try {
-				if (fSideChoice == "odd") { //dodac obsluge bledow, ze jak sie wpisuje red w pole parity to wywaluje error
-					fcheckParityAnswer = 1;
+			if (fSideChoice != "back") {
+				try {
+					if (fSideChoice == "odd") {
+						fcheckParityAnswer = 1;
+					}
+					else if (fSideChoice == "even") {
+						fcheckParityAnswer = 0;
+					}
+					else {
+						throw "This is not a proper answer";
+					}
+					if (fcheckParityAnswer == isOdd) {
+						fisWin = 1;
+						cout << "Win!";
+					}
+					else if (!fUserDecided || fErrorHandler == 1) {
+						fisWin = 0;
+						fbet = 0;
+					}
+					else {
+						fisWin = 0;
+						cout << "Try again!";
+					}
 				}
-				else if (fSideChoice == "even") {
-					fcheckParityAnswer = 0;
-				}
-				else {
-					throw 124;
-				}
-				if (fcheckParityAnswer == isOdd) {
-					fisWin = 1;
-					cout << "Win!";
-				}
-				else if (!fUserDecided || fErrorHandler == 1) {
-					fisWin = 0;
+				catch (const char* exception) {
+					cerr << exception <<endl;
 					fbet = 0;
 				}
-				else {
-					fisWin = 0;
-					cout << "Try again!";
-				}
-			}
-			catch (int parityError) {
-				cout << "This is not proper answer" << " Error type:" << parityError << endl;
-				fbet = 0;
 			}
 		}
 		else if (fMainChoice == '3') {
-			// tutaj dodac try catch funkcje zeby obsluzyc blad gdyby uzytkownik zamiast liczby wpisal cos innego glupiego,. ale zostawie to bo na jpo tera to bedziemy miec
 			int number{};
-			try {
-				int number = stoi(fSideChoice);//zeby zamienic string na int w przypadku wybrania liczby 
-				if (number < 0 || number>36) {
-					throw 123;
+			if (fSideChoice != "back") {
+				try {
+					int number = stoi(fSideChoice);//zeby zamienic string na int w przypadku wybrania liczby 
+					if (number < 0 || number>36) {
+						throw 123;
+					}
+					if (numResult == number) {
+						fisWin = 1;
+						cout << "Win!";
+					}
+					else if (!fUserDecided || fErrorHandler == 1) {
+						fisWin = 0;
+						fbet = 0;
+					}
+					else {
+						fisWin = 0;
+						cout << "Try again!";
+					}
 				}
-				if (numResult == number) {
-					fisWin = 1;
-					cout << "Win!";
+				catch (const std::invalid_argument& ia) {
+					cerr << "Invalid argument: " << ia.what() << endl;
+					fbet = 0;
 				}
-				else if (!fUserDecided || fErrorHandler == 1) {
+				catch (const std::out_of_range& oor) {
+					cerr << "Out of Range error:" << oor.what() << endl;
+					fbet = 0;
+				}
+				catch (int rangeErr) {
+					cout << "The number is out of range (0-36)" << "Error type:" << rangeErr << endl;
 					fisWin = 0;
 					fbet = 0;
 				}
-				else {
-					fisWin = 0;
-					cout << "Try again!";
-				}
 			}
-			catch (const std::invalid_argument& ia) {
-				cerr << "Invalid argument: " << ia.what() << endl;
+			else {
 				fbet = 0;
 			}
-			catch (const std::out_of_range& oor) {
-				cerr << "Out of Range error:" << oor.what() << endl;
-				fbet = 0;
-			}
-			catch (int rangeErr) {
-				cout << "The number is out of range (0-36)" << "Error type:" << rangeErr << endl;
-				fisWin = 0;
-				fbet = 0;
-			}
-		}
-		else {
-			cout << "Next time write proper answer!" << endl;
 		}
 	}
 	void Game::savePattern(const string& col, const int& number) {
@@ -226,8 +231,17 @@
 		}
 		cout << endl;
 	}
-	void Game::stop(const float& balance) { //gdy gracz nie ma kredytow, gra sie konczy
+	void Game::stop(const float& balance) { // Gdy gracz nie ma kredytow, gra sie konczy
 		if (balance <= 0) {
 			exit(EXIT_SUCCESS);
 		}
+	}
+
+	string Game::lowerCase(string txt) {
+		string newTxt;
+		for (auto i : txt) { // W razie gdyby ktos wpisal z duzych liter albo z malych i zeby nie wyrzuca³o bledu
+			i = tolower(i);
+			newTxt += i;
+		}
+		return newTxt;
 	}
