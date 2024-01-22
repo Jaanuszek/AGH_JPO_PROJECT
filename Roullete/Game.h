@@ -19,7 +19,6 @@ private:
 	float fbet{};
 	char fMainChoice{};
 	std::string fSideChoice{};
-	std::string fCheck{};
 	bool fisWin = 0;
 	bool fUserDecided = 0;
 	bool fcheckParityAnswer=0;

@@ -25,9 +25,7 @@ public:
 
 	bool get_is_odd(void) const; // Zwraca wartoœæ fIsOdd, która sprawdza parzystoœæ wylosowanej liczby
 	
-	int get_number(void) const; // Zwraca fNumber, zmienna zawiera wylosowany numer
-
-	void randomNumber(); // Funkcja odpowiada za wylosowanie numeru od 0-36
+	int randomNumber(); // Funkcja odpowiada za wylosowanie i zwrocenie numeru od 0-36
 
 	std::string isOdd(); //Funkcja sprawdzaj¹ca parzystoœæ liczby. Zwraca parzystoœæ w formie napisu
 

@@ -8,12 +8,9 @@ bool RouletteWheel::get_is_odd(void) const {
 	return fIsOdd;
 }
 
-int RouletteWheel::get_number(void) const {
-	return fNumber;
-}
-
-void RouletteWheel::randomNumber() {
+int RouletteWheel::randomNumber() {
 	fNumber = dist(rd);
+	return fNumber;
 }
 
 string RouletteWheel::isOdd() {

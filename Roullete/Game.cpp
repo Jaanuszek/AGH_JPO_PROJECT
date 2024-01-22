@@ -57,7 +57,7 @@
 		}
 		system("CLS");
 	}
-	void Game::choice(const float& accBalance) { //wybor 
+	void Game::choice(const float& accBalance) { // Wybor 
 		fUserDecided = false;
 		while (!fUserDecided) {
 			cout << "1. Colour" << endl;
